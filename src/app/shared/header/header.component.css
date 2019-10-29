@@ -1,0 +1,10 @@
+header {
+    justify-content: space-between;
+}
+
+.btn {
+    background-color: inherit;
+    display: inline-block;
+    border: none;
+    margin-left: 1rem;
+}

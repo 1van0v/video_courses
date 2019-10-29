@@ -1,0 +1,6 @@
+footer {
+    justify-content: flex-end;
+    position: sticky;
+    bottom: 0;
+    width: inherit;
+}

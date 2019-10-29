@@ -1,6 +1,22 @@
-<div>
-    <h3>{{courseItem.title}}</h3>
-    <p>{{courseItem.description}}</p>
-    <div>{{courseItem.creationDate | date}}</div>
-    <div>{{courseItem.duration}} min</div>
+<div class="course-item">
+    <div class="course-details">
+        <div class="course-header">
+            <h3 class="course-title">{{courseItem.title}}</h3>
+            <div class="course-timing">
+                <span class="course-duration">{{courseItem.duration | courseDuration}}</span>
+                <span class="creation-date">{{courseItem.creationDate | date}}</span>
+            </div>
+        </div>
+        <div class="course-description">{{courseItem.description}}</div>
+    </div>
+    <div class="action-buttons">
+        <button class="btn" routerLink="../course/{{courseItem.id}}">
+            <img class="icon" src="assets/edit.svg">
+            Edit
+        </button>
+        <button class="btn" (click)="deleteItem(courseItem)">
+            <img class="icon" src="assets/delete.svg">
+            Delete
+        </button>
+    </div>
 </div>

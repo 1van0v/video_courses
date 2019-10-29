@@ -1,3 +1,25 @@
-<div>
-    <app-courses-list-item *ngFor="let course of courses" [courseItem]="course"></app-courses-list-item>
+<div class="courses-list content-padding main-content">
+    <div class="search-container">
+        <div class="search-bar">
+            <img src="assets/ic-search.svg" class="search-image">
+            <input type="text" 
+                placeholder="Text to search" 
+                class="search-field"
+                [(ngModel)]="searchString">
+        </div>
+        <button class="btn search-btn" (click)="onSearch()">Search</button>
+    </div>
+    <button class="btn add-btn">
+        <img src="assets/add.svg">
+        Add course
+    </button>
+    <app-courses-list-item 
+        *ngFor="let course of courses" 
+        (deletedItem)="onDeleteItem($event)"
+        [courseItem]="course">
+    </app-courses-list-item>
+    <button class="btn load-more-btn"
+        (click)="onLoadMore()">
+        Load more
+    </button>
 </div>

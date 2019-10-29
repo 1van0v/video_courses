@@ -1,43 +1,15 @@
 import { Injectable } from '@angular/core';
-import { CoursesListItem } from './courses-list-item.class';
+import { CoursesListResponse } from './courses-list-response.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
 
-  constructor() { }
-
-  public getCourses(): CoursesListItem[] {
-    return [
-      {
-        id: 1,
-        title: 'Video course 1',
-        creationDate: (new Date()).valueOf(),
-        duration: 100,
-        description: 'This is video course 1'
-      },
-      {
-        id: 2,
-        title: 'Video course 2',
-        creationDate: (new Date()).valueOf() - 1000000,
-        duration: 100,
-        description: 'This is video course 2'
-      },
-      {
-        id: 3,
-        title: 'Video course 3',
-        creationDate: (new Date()).valueOf() - 3000000,
-        duration: 100,
-        description: 'This is video course 3'
-      },
-      {
-        id: 4,
-        title: 'Video course 4',
-        creationDate: (new Date()).valueOf() - 4000000,
-        duration: 100,
-        description: 'This is video course 4'
-      }
-    ];
+  public constructor(private http: HttpClient) { }
+  public getCourses(): Observable<CoursesListResponse> {
+    return this.http.get<CoursesListResponse>('assets/courses.json');
   }
 }
