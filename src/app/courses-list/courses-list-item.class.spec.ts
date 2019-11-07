@@ -1,4 +1,4 @@
-import { CoursesListItem } from './courses-list-item';
+import { CoursesListItem } from './courses-list-item.class';
 
 describe('CoursesListItem', () => {
   it('should create an instance', () => {
