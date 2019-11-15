@@ -6,8 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { CoursesService } from '../courses.service';
 import { CoursesListItem } from '../courses-list-item.class';
-import { CoursesListItemComponent } from '../courses-list-item/courses-list-item.component';
 import { By } from '@angular/platform-browser';
+import { SearchCoursesPipe } from '../pipes/search-courses.pipe';
+import { OrderByPipe } from '../pipes/order-by.pipe';
 
 describe('CoursesListComponent', () => {
   let component: CoursesListComponent;
@@ -18,22 +19,25 @@ describe('CoursesListComponent', () => {
     title: 'test title',
     creationDate: 1572870106633,
     duration: 100,
-    description: 'test description'
+    description: 'test description',
+    topRated: false
   };
 
+  const courses = [ testItem ];
+
   beforeEach(async(() => {
-
     const coursesService = jasmine.createSpyObj('CoursesService', ['getCourses']);
-
-    getCoursesSpy = coursesService.getCourses.and.returnValue( of({
-      courses: [ testItem ]
-    }) );
+    getCoursesSpy = coursesService.getCourses.and.returnValue( of({ courses }) );
 
     TestBed.configureTestingModule({
       imports: [ FormsModule ],
       declarations: [ CoursesListComponent ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-      providers: [ { provide: CoursesService, useValue: coursesService }]
+      providers: [
+        { provide: CoursesService, useValue: coursesService },
+        SearchCoursesPipe,
+        OrderByPipe
+      ]
     })
     .compileComponents();
   }));
@@ -67,7 +71,7 @@ describe('CoursesListComponent', () => {
   });
 
   it('should call onLoadMore method on clicking on load more button', () => {
-    const loadMoreBtn = fixture.nativeElement.querySelector('.load-more-btn');
+    const loadMoreBtn = fixture.nativeElement.querySelector('.full-width-btn');
     const onLoadMoreSpy = spyOn(component, 'onLoadMore').and.callThrough();
 
     loadMoreBtn.click();
@@ -94,4 +98,23 @@ describe('CoursesListComponent', () => {
 
     expect(onSearchSpy).toHaveBeenCalled();
   });
+
+  describe('empty coursesList', () => {
+    beforeEach(() => {
+      courses.length = 0;
+      fixture.detectChanges();
+    });
+
+    it('should display no data button', () => {
+      const btnLabel = 'No data. Feel free to add a new course.';
+      const element = fixture.debugElement.query(By.css('.full-width-btn'));
+      const displayedTxt = element.nativeElement.textContent;
+      expect(displayedTxt.trim()).toEqual(btnLabel);
+    });
+
+    afterEach(() => {
+      courses.push(testItem);
+    });
+  });
+
 });

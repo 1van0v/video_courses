@@ -13,13 +13,20 @@
         <img src="assets/add.svg">
         Add course
     </button>
-    <app-courses-list-item 
-        *ngFor="let course of courses" 
-        (deletedItem)="onDeleteItem($event)"
-        [courseItem]="course">
-    </app-courses-list-item>
-    <button class="btn load-more-btn"
-        (click)="onLoadMore()">
-        Load more
-    </button>
+    <div *ngIf="courses.length; else noCoursesBtn">
+        <app-courses-list-item 
+            *ngFor="let course of courses" 
+            (deletedItem)="onDeleteItem($event)"
+            [courseItem]="course">
+        </app-courses-list-item>
+        <button class="btn full-width-btn"
+            (click)="onLoadMore()">
+            Load more
+        </button>
+    </div>
+    <ng-template #noCoursesBtn>
+        <button class="btn full-width-btn">
+            No data. Feel free to add a new course.
+        </button>
+    </ng-template>
 </div>

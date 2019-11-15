@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CoursesListItem } from '../courses-list-item.class';
 import { CoursesListResponse } from '../courses-list-response.model';
 import { CoursesService } from '../courses.service';
+import { SearchCoursesPipe } from '../pipes/search-courses.pipe';
+import { OrderByPipe } from '../pipes/order-by.pipe';
 
 @Component({
   selector: 'app-courses-list',
@@ -10,12 +12,20 @@ import { CoursesService } from '../courses.service';
 })
 export class CoursesListComponent implements OnInit {
   public courses: CoursesListItem[] = [];
+  private originCourses: CoursesListItem[] = [];
   public searchString: string;
-  public constructor( private coursesService: CoursesService ) { }
+
+  public constructor(
+    private coursesService: CoursesService,
+    private searchCourses: SearchCoursesPipe,
+    private orderCourses: OrderByPipe
+  ) { }
 
   public ngOnInit() {
     this.coursesService.getCourses()
-      .subscribe((data: CoursesListResponse) => this.courses = data.courses);
+      .subscribe((data: CoursesListResponse) => {
+        this.courses = this.orderCourses.transform(data.courses, 'asc');
+      });
   }
 
   public onDeleteItem(course: CoursesListItem) {
@@ -27,7 +37,9 @@ export class CoursesListComponent implements OnInit {
   }
 
   public onSearch() {
-    console.log(`We are looking for "${this.searchString}". Please wait...`);
+    if (!this.originCourses.length) {
+      this.originCourses = [ ...this.courses ];
+    }
+    this.courses = this.searchCourses.transform(this.originCourses, this.searchString);
   }
-
 }

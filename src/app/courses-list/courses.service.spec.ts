@@ -16,7 +16,8 @@ describe('CoursesService', () => {
         title: 'test title',
         creationDate: 1572870106633,
         duration: 100,
-        description: 'test description'
+        description: 'test description',
+        topRated: false
       }
     ]
   };

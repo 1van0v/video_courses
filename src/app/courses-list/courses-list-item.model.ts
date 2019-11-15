@@ -4,4 +4,5 @@ export interface ICoursesListItem {
     creationDate: number;
     duration: number;
     description: string;
+    topRated: boolean;
 }

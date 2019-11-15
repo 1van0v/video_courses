@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { CoursesListItemComponent } from './courses-list-item.component';
 import { CoursesListItem } from '../courses-list-item.class';
@@ -14,7 +14,8 @@ describe('CoursesListItemComponent', () => {
     title: 'test title',
     creationDate: 1572870106633,
     duration: 100,
-    description: 'test description'
+    description: 'test description',
+    topRated: false
   };
 
   beforeEach(async(() => {
@@ -30,7 +31,8 @@ describe('CoursesListItemComponent', () => {
         CoursesListItemComponent,
         MockPipe
       ],
-      imports: [ RouterTestingModule ]
+      imports: [ RouterTestingModule ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));

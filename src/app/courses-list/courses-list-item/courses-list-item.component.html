@@ -1,13 +1,15 @@
-<div class="course-item">
-    <div class="course-details">
-        <div class="course-header">
-            <h3 class="course-title">{{courseItem.title}}</h3>
-            <div class="course-timing">
-                <span class="course-duration">{{courseItem.duration | courseDuration}}</span>
-                <span class="creation-date">{{courseItem.creationDate | date}}</span>
+<div class="course__item"
+    [ngClass]="{'course_top-rated': courseItem.topRated}"
+    [appCreationDate]="courseItem.creationDate">
+    <div class="course__details">
+        <div class="course__header">
+            <h3 class="course__title">{{courseItem.title | uppercase}}</h3>
+            <div class="course__timing">
+                <span class="course__duration">{{courseItem.duration | courseDuration}}</span>
+                <span class="course__creation-date">{{courseItem.creationDate | date}}</span>
             </div>
         </div>
-        <div class="course-description">{{courseItem.description}}</div>
+        <div class="course__description">{{courseItem.description}}</div>
     </div>
     <div class="action-buttons">
         <button class="btn" routerLink="../course/{{courseItem.id}}">

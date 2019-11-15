@@ -6,4 +6,5 @@ export class CoursesListItem implements ICoursesListItem {
     public creationDate: number;
     public duration: number;
     public description: string;
+    public topRated: boolean;
 }
