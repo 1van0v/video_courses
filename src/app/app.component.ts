@@ -8,6 +8,8 @@ import { Component,
   AfterViewChecked,
   OnDestroy } from '@angular/core';
 
+import { AuthService } from './core/auth-service.service';
+
 // tslint:disable-next-line: no-conflicting-lifecycle
 @Component({
   selector: 'app-root',
@@ -18,6 +20,9 @@ import { Component,
 export class AppComponent implements
   OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
   public title = 'video-courses-app';
+  public isAuthenticated: boolean;
+
+  public constructor( private authService: AuthService) {}
 
   public ngOnChanges() {
     console.log('ngOnChanges - Angular (re)sets data-bound input properties');
@@ -25,6 +30,9 @@ export class AppComponent implements
 
   public ngOnInit() {
     console.log('ngOnInit - Angular initializes the directive/component');
+    this.authService.authListener.subscribe((data: boolean) => {
+      this.isAuthenticated = data;
+    });
   }
 
   public ngDoCheck() {

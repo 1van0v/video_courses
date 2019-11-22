@@ -4,12 +4,13 @@
             <img src="assets/logo.svg">
         </a>
     </div>
-    <div>
+    <div *ngIf="user">
         <span>
             <img src="assets/ic-user.svg">
-            User login
+            {{user.login}}
         </span>
-        <button class="btn">
+        <button class="btn"
+            (click)="logOut()">
             <img src="assets/ic-exit.svg">
             Log off
         </button>

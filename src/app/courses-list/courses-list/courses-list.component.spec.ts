@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CoursesListComponent } from './courses-list.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
+
+import { CoursesListComponent } from './courses-list.component';
 import { CoursesService } from '../courses.service';
 import { CoursesListItem } from '../courses-list-item.class';
-import { By } from '@angular/platform-browser';
 import { SearchCoursesPipe } from '../pipes/search-courses.pipe';
 import { OrderByPipe } from '../pipes/order-by.pipe';
 
@@ -27,7 +27,7 @@ describe('CoursesListComponent', () => {
 
   beforeEach(async(() => {
     const coursesService = jasmine.createSpyObj('CoursesService', ['getCourses']);
-    getCoursesSpy = coursesService.getCourses.and.returnValue( of({ courses }) );
+    getCoursesSpy = coursesService.getCourses.and.returnValue( of(courses) );
 
     TestBed.configureTestingModule({
       imports: [ FormsModule ],
@@ -91,7 +91,7 @@ describe('CoursesListComponent', () => {
   });
 
   it('should call onSearch method on clicking on search button', () => {
-    const searchBtn = fixture.nativeElement.querySelector('.search-btn');
+    const searchBtn = fixture.nativeElement.querySelector('.search-container .action-btn');
     const onSearchSpy = spyOn(component, 'onSearch').and.callThrough();
 
     searchBtn.click();

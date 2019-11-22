@@ -1,0 +1,53 @@
+<div class="login__background">
+    <div class="login__window">
+        <div class="login__header">
+            <div class="login__title">Login</div>
+            <div
+                class="login__warning"
+                *ngIf="isLoginError">
+                Wrong e-mail or password
+            </div>
+        </div>
+        <div>
+            <div class="login__label">
+                <label for="login" class="login__label_bold">E-mail:</label>
+                <span
+                    class="login__label_required"
+                    *ngIf="!userName">
+                    *required
+                </span>
+            </div>
+            <input 
+                id="login" 
+                type="email" 
+                class="login__input"
+                placeholder="Enter e-mail"
+                [(ngModel)]="userName"
+                (ngModelChange)="isFormFilled()">
+            <div class="login__label">
+                <label for="password" class="login__label_bold">Password:</label>
+                <span
+                    class="login__label_required"
+                    *ngIf="!password">
+                    *required
+                </span>
+            </div>
+            <input 
+                id="password" 
+                type="password" 
+                class="login__input"
+                placeholder="Enter password"
+                [(ngModel)]="password"
+                (ngModelChange)="isFormFilled()">
+        </div>
+        <div class="login__footer">
+            <button class="btn underlined-btn">Forgot password?</button>
+            <button 
+                class="btn action-btn login__loginBtn"
+                [ngClass]="{ 'disabled-btn': !canLogin }"
+                (click)="login(userName, password)">
+                Login
+            </button>
+        </div>
+    </div>
+</div>

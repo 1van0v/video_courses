@@ -7,7 +7,12 @@
                 class="search-field"
                 [(ngModel)]="searchString">
         </div>
-        <button class="btn search-btn" (click)="onSearch()">Search</button>
+        <button
+            id="search-btn"
+            class="btn action-btn" 
+            (click)="onSearch()">
+            Search
+        </button>
     </div>
     <button class="btn add-btn">
         <img src="assets/add.svg">
@@ -19,14 +24,39 @@
             (deletedItem)="onDeleteItem($event)"
             [courseItem]="course">
         </app-courses-list-item>
-        <button class="btn full-width-btn"
+        <button class="btn underlined-btn full-width-btn"
             (click)="onLoadMore()">
             Load more
         </button>
     </div>
     <ng-template #noCoursesBtn>
-        <button class="btn full-width-btn">
+        <button class="btn underlined-btn full-width-btn">
             No data. Feel free to add a new course.
         </button>
     </ng-template>
+    <div class="modal" *ngIf="showModal">
+        <div class="modal__window">
+            <div class="modal__header">
+                <span>Delete course?</span>
+                <button 
+                    class="btn" 
+                    (click)="cancelDelete()">
+                    <img title="close" src="assets/close.svg">
+                </button>
+            </div>
+            <div class="modal__body">
+                <p>Are your sure you want to delete {{selectedCourse.title}}</p>
+            </div>
+            <div class="modal__footer">
+                <button 
+                    class="btn dismiss-btn"
+                    (click)="cancelDelete()">
+                        Cancel
+                </button>
+                <button 
+                    class="btn action-btn"
+                    (click)="deleteCourse(selectedCourse)">Yes, delete</button>
+            </div>
+        </div>
+    </div>
 </div>

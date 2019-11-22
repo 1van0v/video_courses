@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CoursesListItem } from '../courses-list-item.class';
-import { CoursesListResponse } from '../courses-list-response.model';
 import { CoursesService } from '../courses.service';
 import { SearchCoursesPipe } from '../pipes/search-courses.pipe';
 import { OrderByPipe } from '../pipes/order-by.pipe';
@@ -12,8 +11,9 @@ import { OrderByPipe } from '../pipes/order-by.pipe';
 })
 export class CoursesListComponent implements OnInit {
   public courses: CoursesListItem[] = [];
-  private originCourses: CoursesListItem[] = [];
   public searchString: string;
+  public showModal = false;
+  public selectedCourse: CoursesListItem;
 
   public constructor(
     private coursesService: CoursesService,
@@ -23,13 +23,17 @@ export class CoursesListComponent implements OnInit {
 
   public ngOnInit() {
     this.coursesService.getCourses()
-      .subscribe((data: CoursesListResponse) => {
-        this.courses = this.orderCourses.transform(data.courses, 'asc');
+      .subscribe((courses: CoursesListItem[]) => {
+        if (this.searchString) {
+          courses = this.searchCourses.transform(courses, this.searchString);
+        }
+        this.courses = this.orderCourses.transform(courses, 'asc');
       });
   }
 
   public onDeleteItem(course: CoursesListItem) {
-    console.log(`Course with ID = ${course.id} is about to be deleted`);
+    this.selectedCourse = course;
+    this.showModal = true;
   }
 
   public onLoadMore() {
@@ -37,9 +41,17 @@ export class CoursesListComponent implements OnInit {
   }
 
   public onSearch() {
-    if (!this.originCourses.length) {
-      this.originCourses = [ ...this.courses ];
-    }
-    this.courses = this.searchCourses.transform(this.originCourses, this.searchString);
+    this.ngOnInit();
+  }
+
+  public cancelDelete() {
+    this.showModal = false;
+    this.selectedCourse = null;
+  }
+
+  public deleteCourse(course: CoursesListItem) {
+    this.coursesService.deleteCourse(course.id);
+    this.showModal = false;
+    this.ngOnInit();
   }
 }
