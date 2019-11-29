@@ -12,7 +12,16 @@ const routes: Routes = [
     data: { title: 'Courses List'},
     canActivate: [ LoggedInGuard ]
   },
-  { path: 'course/:id', component: CourseDetailComponent}
+  {
+    path: 'course/:id',
+    component: CourseDetailComponent,
+    canActivate: [ LoggedInGuard ]
+  },
+  {
+    path: 'course/new',
+    component: CourseDetailComponent,
+    canActivate: [ LoggedInGuard ]
+  }
 ];
 
 @NgModule({

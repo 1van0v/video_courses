@@ -5,4 +5,5 @@ export interface ICoursesListItem {
     duration: number;
     description: string;
     topRated: boolean;
+    authors: string;
 }

@@ -29,26 +29,21 @@ export class AuthService {
       this.user = { login };
       localStorage.setItem(this.appKey, JSON.stringify({ login, password }));
     }
+    this.notifyAuth();
     return this.authenticated;
   }
 
   private checkCredentials(login: string, password: string): boolean {
     this.authenticated = this.login === login && this.password === password;
-    this.authListener.next(this.authenticated);
     return this.authenticated;
   }
 
   public lookupLocalStorage(): boolean {
-    const credentials = JSON.parse(localStorage.getItem(this.appKey));
-    let isValid = false;
-    if (credentials) {
-      const { login, password } = credentials;
-      isValid = this.checkCredentials(login, password);
+    const savedCredentials = localStorage.getItem(this.appKey);
+    if (savedCredentials) {
+      const { login, password } = JSON.parse(savedCredentials);
+      return this.logIn(login, password);
     }
-    if (isValid) {
-      this.user = { login: credentials.login };
-    }
-    return this.authenticated;
   }
 
   public logOut(): void {
@@ -56,5 +51,10 @@ export class AuthService {
     this.user = null;
     this.authenticated = false;
     localStorage.removeItem(this.appKey);
+    this.notifyAuth();
+  }
+
+  private notifyAuth(): void {
+    this.authListener.next(this.authenticated);
   }
 }

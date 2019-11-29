@@ -1,0 +1,46 @@
+:host {
+    flex-grow: 2;
+}
+
+.course-details {
+    margin: 24px auto;
+    width: 60%;
+    min-width: 500px;
+    max-width: 720px;
+}
+
+.modal__title {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.course-details__description {
+    resize: none;
+    height: 6.5em;
+    line-height: 1.5em;
+}
+
+.course-details__duration,
+.course-details__date {
+    width: 180px;
+}
+
+.course-details__duration {
+    display: inline-block;
+    margin-right: 12px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0);
+    display: block;
+    opacity: 1;
+    background: url(/assets/calendar.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 18px;
+    height: 18px;
+}
+
+.course-details__authors {
+    width: 400px;
+}

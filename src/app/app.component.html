@@ -1,4 +1,6 @@
-<app-header></app-header>
-<app-breadcrumbs *ngIf="isAuthenticated"></app-breadcrumbs>
-<router-outlet></router-outlet>
+<div class="app__body">
+    <app-header></app-header>
+    <app-breadcrumbs *ngIf="isAuthenticated"></app-breadcrumbs>
+    <router-outlet></router-outlet>
+</div>
 <app-footer></app-footer>

@@ -15,7 +15,8 @@ describe('CoursesListItemComponent', () => {
     creationDate: 1572870106633,
     duration: 100,
     description: 'test description',
-    topRated: false
+    topRated: false,
+    authors: ''
   };
 
   beforeEach(async(() => {

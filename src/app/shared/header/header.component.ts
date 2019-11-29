@@ -1,4 +1,4 @@
-import { Component, DoCheck } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth-service.service';
 import { User } from '../../core/user.class';
@@ -8,7 +8,7 @@ import { User } from '../../core/user.class';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements DoCheck {
+export class HeaderComponent implements OnInit {
   public user: User;
 
   public constructor(
@@ -16,8 +16,10 @@ export class HeaderComponent implements DoCheck {
     private router: Router
   ) { }
 
-  public ngDoCheck(): void {
-    this.user = this.authService.getUserInfo();
+  public ngOnInit(): void {
+    this.authService.authListener.subscribe(() => {
+      this.user = this.authService.getUserInfo();
+    });
   }
 
   public logOut(): void {

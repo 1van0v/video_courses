@@ -7,8 +7,10 @@ export class CourseDurationPipe implements PipeTransform {
 
   public transform(value: number): string {
     let duration = '';
-    duration += String( Math.trunc(value / 60) ) + 'h ';
-    duration += String( value % 60 ) + 'm';
+    if (!isNaN(value)) {
+      duration += String( Math.trunc(value / 60) ) + 'h ';
+      duration += String( value % 60 ) + 'm';
+    }
     return duration;
   }
 

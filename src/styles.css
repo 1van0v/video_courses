@@ -52,11 +52,93 @@ body {
     background-color: lightgray;
     color: black;
 }
+
 .icon {
     height: 100%;
 }
 
 .main-content {
-    min-height: calc(100vh - 2 * var(--header-height));
+    background-color: var(--item-background);
+    height: 100%;
     overflow: auto;
+}
+
+.modal__window .btn {
+    height: 36px;
+    padding: 4px 15px;
+}
+
+.modal__footer,
+.modal__header,
+.app__body {
+    display: flex;
+}
+
+.app__body {
+    flex-direction: column;
+    height: calc(100vh - var(--header-height));
+    overflow: auto;
+    justify-content: space-between;
+}
+
+.modal__window {
+    width: 400px;
+    border-radius: 6px;
+    background-color: white;
+}
+
+.modal__header {
+    border-radius: 6px 6px 0 0;
+    height: 54px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal__header .btn {
+    background-color: var(--background-gray);
+}
+
+.modal__footer {
+    padding: 20px;
+    justify-content: flex-end;
+}
+
+.modal__header,
+.modal__body {
+    padding: 0 20px;
+}
+
+.dismiss-btn {
+    background-color: gray;
+    border-radius: 3px;
+    margin-right: 15px;
+}
+
+.form__label {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form__label_bold {
+    font-weight: 600;
+    font-size: smaller;
+}
+
+.form__label_required {
+    font-size: x-small;
+    color: var(--gray-font);
+}
+
+.form__input {
+    width: 100%;
+    height: 36px;
+    border-radius: 3px;
+    border: solid 1px var(--placeholder-color);
+    margin: 10px 0;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.form__input::placeholder {
+    color: var(--placeholder-color);
 }
