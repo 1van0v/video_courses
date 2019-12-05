@@ -1,3 +1,9 @@
 <div class="content-padding breadcrumbs">
-    <span>Courses</span>
+    <a
+        class="breadcrumb"
+        [ngClass]="{'breadcrumb-clickable': breadcrumb.link}"
+        *ngFor="let breadcrumb of breadcrumbs"
+        (click)="followBreadcrumb(breadcrumb.link)">
+        {{breadcrumb.title}}
+    </a>
 </div>

@@ -15,9 +15,9 @@ import { SharedModule } from './shared/shared.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     CoreModule,
     CoursesListModule,
+    AppRoutingModule,
     SharedModule,
     HttpClientModule
   ],

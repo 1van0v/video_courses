@@ -35,16 +35,15 @@ export class CoursesService {
       );
   }
 
-  public updateCourse(id: number, field: string, value: number | string | boolean): Observable<CoursesListItem> {
-    return this.getCourse(id)
+  public updateCourse(updatedItem: CoursesListItem): void {
+     this.getCourses()
       .pipe(
-        map(course => {
-          if (course && field !== 'id') {
-            course[field] = value;
-          }
-          return course;
+        map((courses: CoursesListItem[]) => {
+          const destIndex = courses.findIndex( ({ id }) => id === updatedItem.id );
+          courses[destIndex] = { ...updatedItem };
+          return courses;
         })
-      );
+      ).subscribe();
   }
 
   public deleteCourse(id: number): void {

@@ -1,0 +1,26 @@
+:host {
+    flex-grow: 2;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.not-found__error {
+    font-size: 5rem;
+    color: darkred;
+}
+
+.not-found__title,
+.not-found__description {
+    text-transform: uppercase;
+    line-height: 2;
+}
+
+.not-found__title {
+    font-size: xx-large;
+}
+
+.not-found__description {
+    font-size: large;
+}

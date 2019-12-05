@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Pipe, PipeTransform } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { CourseDetailComponent } from './course-detail.component';
 
@@ -18,7 +19,10 @@ describe('CourseDetailComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [ CourseDetailComponent, MockPipe ],
-      imports: [ FormsModule ]
+      imports: [
+        RouterTestingModule,
+        FormsModule
+      ]
     })
     .compileComponents();
   }));

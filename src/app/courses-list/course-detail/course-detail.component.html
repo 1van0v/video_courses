@@ -1,7 +1,7 @@
 <div class="main-content content-padding">
     <div class="modal__window course-details">
         <div class="modal__header">
-            <span class="modal__title">New course</span>
+            <span class="modal__title">{{windowTitle}} course</span>
         </div>
         <div class="modal__body">
             <div class="form__label">
@@ -12,8 +12,8 @@
                     *required
                 </span>
             </div>
-            <input 
-                id="course-title" 
+            <input
+                id="course-title"
                 class="form__input"
                 placeholder="Course title"
                 [(ngModel)]="course.title">
@@ -62,9 +62,8 @@
                     id="course-date" 
                     type="date" 
                     class="form__input"
-                    pattern="\d{4}-\d{2}-\d{2}"
                     placeholder="minutes"
-                    [(ngModel)]="course.creationDate">
+                    [ngModel]="getDateString()">
             </div>
             <div class="course-details__authors">
                 <div class="form__label">
@@ -84,11 +83,13 @@
         </div>
         <div class="modal__footer">
             <button 
-                class="btn dismiss-btn">
+                class="btn dismiss-btn"
+                (click)="cancelEditing()">
                 Cancel
             </button>
             <button 
-                class="btn action-btn">
+                class="btn action-btn"
+                (click)="saveCourse()">
                 Save
             </button>
         </div>

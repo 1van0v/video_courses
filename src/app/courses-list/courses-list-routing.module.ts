@@ -9,18 +9,20 @@ const routes: Routes = [
   {
     path: 'courses',
     component: CoursesListComponent,
-    data: { title: 'Courses List'},
+    data: { title: 'Courses List', breadcrumb: { title: 'courses', link: 'courses' } },
     canActivate: [ LoggedInGuard ]
   },
   {
     path: 'course/:id',
     component: CourseDetailComponent,
-    canActivate: [ LoggedInGuard ]
+    canActivate: [ LoggedInGuard ],
+    data: { breadcrumb: { title: 'course' } }
   },
   {
     path: 'course/new',
     component: CourseDetailComponent,
-    canActivate: [ LoggedInGuard ]
+    canActivate: [ LoggedInGuard ],
+    data: { breadcrumb: {title: 'New' } }
   }
 ];
 

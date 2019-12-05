@@ -5,3 +5,21 @@
     display: flex;
     align-items: center;
 }
+
+.breadcrumb {
+    padding-left: 10px;
+}
+
+.breadcrumb:after {
+    content: "/";
+}
+
+.breadcrumb:last-child:after {
+    content: "";
+    cursor: default;
+}
+
+.breadcrumb-clickable {
+    /* text-decoration: underline; */
+    cursor: pointer;
+}
