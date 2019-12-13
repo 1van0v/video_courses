@@ -1,9 +1,9 @@
 export interface ICoursesListItem {
     id: number;
-    title: string;
-    creationDate: number;
-    duration: number;
+    name: string;
+    date: Date | string;
+    length: number;
     description: string;
-    topRated: boolean;
+    isTopRated: boolean;
     authors: string;
 }

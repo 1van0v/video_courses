@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+
 import { CoursesListItem } from '../courses-list-item.class';
 import { CoursesService } from '../courses.service';
+import { BreadcrumbsService } from '../../shared/breadcrumbs.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -15,13 +18,14 @@ export class CourseDetailComponent implements OnInit {
   public constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private coursesService: CoursesService
+    private coursesService: CoursesService,
+    private breadcrumbsService: BreadcrumbsService
   ) { }
 
   public ngOnInit() {
     this.activatedRoute.params
       .subscribe(params => {
-        if (params.id) {
+        if (params.id !== 'new') {
           this.fetchCourse(Number(params.id));
           this.windowTitle = 'Edit';
         }
@@ -29,16 +33,12 @@ export class CourseDetailComponent implements OnInit {
   }
 
   public getDateString(): string {
-    const dateObj = new Date(this.course.creationDate);
-    let dateString = '';
-    dateString += dateObj.getFullYear() + '-';
-    dateString += this.addZeros( dateObj.getMonth() + 1 ) + '-';
-    dateString += this.addZeros( dateObj.getDate() );
-    return dateString;
+    const dateString = this.course.date as string;
+    return dateString && dateString.split('T')[0];
   }
 
-  private addZeros(date: number): string {
-    return String(date).padStart(2, '0');
+  public setDateString(dateStr: string): void {
+    this.course.date = (new Date(dateStr)).toISOString();
   }
 
   public cancelEditing(): void {
@@ -46,8 +46,17 @@ export class CourseDetailComponent implements OnInit {
   }
 
   public saveCourse(): void {
-    this.coursesService.updateCourse(this.course);
-    this.goToCourses();
+    this.getSaveAction(this.course).subscribe(() => {
+      this.goToCourses();
+    });
+  }
+
+  private getSaveAction(course: CoursesListItem): Observable<CoursesListItem> {
+    if (course.id) {
+      return this.coursesService.updateCourse(this.course);
+    } else {
+      return this.coursesService.createCourse(this.course);
+    }
   }
 
   private goToCourses(): void {
@@ -62,7 +71,7 @@ export class CourseDetailComponent implements OnInit {
         }
         this.course = { ...course };
         const { breadcrumb } = this.activatedRoute.routeConfig.data;
-        breadcrumb.title = this.course.title;
+        this.breadcrumbsService.updateTitle(breadcrumb.title, this.course.name);
       });
   }
 

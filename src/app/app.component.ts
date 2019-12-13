@@ -8,7 +8,11 @@ import { Component,
   AfterViewChecked,
   OnDestroy } from '@angular/core';
 
+import { Router, ActivatedRoute, ActivationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
 import { AuthService } from './core/auth-service.service';
+import { BreadcrumbsService } from './shared/breadcrumbs.service';
 
 // tslint:disable-next-line: no-conflicting-lifecycle
 @Component({
@@ -22,7 +26,19 @@ export class AppComponent implements
   public title = 'video-courses-app';
   public isAuthenticated: boolean;
 
-  public constructor( private authService: AuthService) {}
+  public constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private breadcrumbsService: BreadcrumbsService
+  ) {
+    this.router.events
+      .pipe(filter(event => event instanceof ActivationEnd))
+      .subscribe((event: ActivationEnd) => {
+        const { breadcrumb } = event.snapshot.data;
+        this.breadcrumbsService.updateStore({ ...breadcrumb });
+      });
+  }
 
   public ngOnChanges() {
     console.log('ngOnChanges - Angular (re)sets data-bound input properties');

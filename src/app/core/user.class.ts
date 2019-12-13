@@ -1,5 +1,12 @@
 import { IUser } from './user.model';
 
 export class User implements IUser {
-    public login: string;
+    id: number;
+    token: string;
+    name: {
+        firstName: string;
+        lastName: string;
+    };
+    login: string;
+    password: string;
 }

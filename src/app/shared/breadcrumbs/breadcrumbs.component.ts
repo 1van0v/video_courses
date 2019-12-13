@@ -1,25 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, RoutesRecognized, ActivationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { BreadcrumbsService } from '../breadcrumbs.service';
 
 @Component({
   selector: 'app-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.css']
 })
-export class BreadcrumbsComponent {
+export class BreadcrumbsComponent implements OnInit {
   public breadcrumbs = [];
 
   public constructor(
     private router: Router,
-    private route: ActivatedRoute
-  ) {
-    this.router.events
-    .pipe(filter(event => event instanceof ActivationEnd))
-    .subscribe((event: ActivationEnd) => {
-      const { breadcrumb } = event.snapshot.root.firstChild.data;
-      this.breadcrumbs.push({ ...breadcrumb });
-    });
+    private breadcrumbsService: BreadcrumbsService
+  ) {}
+
+  public ngOnInit(): void {
+    this.breadcrumbs = this.breadcrumbsService.getStore();
   }
 
   public followBreadcrumb(link: string): void {

@@ -9,7 +9,7 @@ export class SearchCoursesPipe implements PipeTransform {
   public transform(value: CoursesListItem[], searchStr: string): CoursesListItem[] {
     const filtered = value.filter((item) => {
       if (!searchStr) { return true; }
-      return item.title.toLowerCase().includes( searchStr.trim().toLowerCase() );
+      return item.name.toLowerCase().includes( searchStr.trim().toLowerCase() );
     });
     return filtered;
   }

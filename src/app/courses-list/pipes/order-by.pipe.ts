@@ -9,7 +9,7 @@ export class OrderByPipe implements PipeTransform {
   transform(courses: CoursesListItem[], order: 'asc'|'desc'): CoursesListItem[] {
     const sortDirection = order === 'asc' ? 1 : -1;
     return courses.sort((a, b) => {
-      return (a.creationDate - b.creationDate) * sortDirection;
+      return (a.date.valueOf() as number - (b.date.valueOf() as number)) * sortDirection;
     });
   }
 

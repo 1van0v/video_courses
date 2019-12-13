@@ -11,11 +11,11 @@ describe('CoursesListItemComponent', () => {
   const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
   const testData: CoursesListItem = {
     id: 1,
-    title: 'test title',
-    creationDate: 1572870106633,
-    duration: 100,
+    name: 'test title',
+    date: '2016-05-31T02:02:36+00:00',
+    length: 100,
     description: 'test description',
-    topRated: false,
+    isTopRated: false,
     authors: ''
   };
 

@@ -2,10 +2,10 @@ import { ICoursesListItem } from './courses-list-item.model';
 
 export class CoursesListItem implements ICoursesListItem {
     public id: number;
-    public title: string;
-    public creationDate: number;
-    public duration: number;
+    public name: string;
+    public date: Date | string;
+    public length: number;
     public description: string;
-    public topRated: boolean;
+    public isTopRated: boolean;
     public authors: string;
 }

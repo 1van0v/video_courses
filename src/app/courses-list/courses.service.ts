@@ -1,52 +1,53 @@
 import { Injectable } from '@angular/core';
-import { CoursesListResponse } from './courses-list-response.model';
-import { CoursesListItem } from './courses-list-item.class';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from, of } from 'rxjs';
-import { map, mergeMap, find } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+
+import { CoursesListItem } from './courses-list-item.class';
+import { ApiUrlHelper } from '../core/api-url-helper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
-  private courses: CoursesListItem[];
 
   public constructor(private http: HttpClient) { }
 
-  private loadCourses(): Observable<CoursesListItem[]> {
+  public getCourses(start: number, count: number): Observable<CoursesListItem[]> {
     return this.http
-      .get<CoursesListResponse>('assets/courses.json')
-      .pipe(
-        map((data) => {
-          return this.courses = data.courses;
-        })
-      );
-  }
-
-  public getCourses(): Observable<CoursesListItem[]> {
-    return this.courses ? of(this.courses) : this.loadCourses();
+      .get(ApiUrlHelper.getCoursesUrl(start, count))
+      .pipe(map(this.parseDate));
   }
 
   public getCourse(id: number): Observable<CoursesListItem> {
-    return this.getCourses()
-      .pipe(
-        mergeMap(courses => from(courses)),
-        find(course => course.id === id)
-      );
+    return this.http
+      .get<CoursesListItem>(ApiUrlHelper.coursesUrl(id));
   }
 
-  public updateCourse(updatedItem: CoursesListItem): void {
-     this.getCourses()
-      .pipe(
-        map((courses: CoursesListItem[]) => {
-          const destIndex = courses.findIndex( ({ id }) => id === updatedItem.id );
-          courses[destIndex] = { ...updatedItem };
-          return courses;
-        })
-      ).subscribe();
+  public updateCourse(updatedItem: CoursesListItem): Observable<CoursesListItem> {
+    return this.http
+      .patch<CoursesListItem>(ApiUrlHelper.coursesUrl(updatedItem.id), updatedItem);
   }
 
-  public deleteCourse(id: number): void {
-    this.courses = this.courses.filter(course => course.id !== id);
+  public deleteCourse(id: number): Observable<{}> {
+    return this.http.delete(ApiUrlHelper.coursesUrl(id));
+  }
+
+  private parseDate(courses: CoursesListItem[]): CoursesListItem[] {
+    return courses.map((course: CoursesListItem) => {
+      course.date = new Date(course.date as string);
+      return course;
+    });
+  }
+
+  public findCourses(searchStr: string): Observable<CoursesListItem[]> {
+    return this.http
+      .get<CoursesListItem[]>(ApiUrlHelper.searchCoursesUrl(searchStr))
+      .pipe(map(this.parseDate));
+  }
+
+  public createCourse(course: Partial<CoursesListItem>): Observable<CoursesListItem> {
+    return this.http
+      .post<CoursesListItem>(ApiUrlHelper.coursesUrl(), course);
   }
 }

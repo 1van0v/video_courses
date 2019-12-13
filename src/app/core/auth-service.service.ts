@@ -1,60 +1,76 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Subject, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { User } from './user.class';
+import { Token } from './token.class';
+import { ApiUrlHelper } from './api-url-helper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private authenticated = false;
-  private user: User;
   private appKey = 'video_courses_key';
-  private password = 'password';
-  private login = 'test@user.com';
+  private apiToken: string;
   public authListener = new Subject();
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) { }
 
   public isAuthenticated(): boolean {
     return this.authenticated;
   }
 
-  public getUserInfo(): User {
-    return this.user;
-  }
-
-  public logIn(login: string, password: string): boolean {
-    this.authenticated = this.checkCredentials(login, password);
-    if (this.authenticated) {
-      this.user = { login };
-      localStorage.setItem(this.appKey, JSON.stringify({ login, password }));
-    }
-    this.notifyAuth();
-    return this.authenticated;
-  }
-
-  private checkCredentials(login: string, password: string): boolean {
-    this.authenticated = this.login === login && this.password === password;
-    return this.authenticated;
+  public logIn(login: string, password: string): Observable<boolean> {
+    return this.http
+      .post<Token>(ApiUrlHelper.loginUrl(), { login, password })
+      .pipe(
+        map((token: Token): boolean => {
+          return this.authenticate(token);
+        })
+      );
   }
 
   public lookupLocalStorage(): boolean {
-    const savedCredentials = localStorage.getItem(this.appKey);
-    if (savedCredentials) {
-      const { login, password } = JSON.parse(savedCredentials);
-      return this.logIn(login, password);
+    const savedToken: string = localStorage.getItem(this.appKey);
+    if (savedToken) {
+      this.apiToken = savedToken;
+      this.loadUserInfo();
+      return this.authenticated = true;
     }
   }
 
   public logOut(): void {
     console.log('I am logging out');
-    this.user = null;
+    this.authListener.next(null);
     this.authenticated = false;
     localStorage.removeItem(this.appKey);
-    this.notifyAuth();
+    this.router.navigate([ 'login' ]);
   }
 
-  private notifyAuth(): void {
-    this.authListener.next(this.authenticated);
+  private authenticate(token: Token): boolean {
+    this.authenticated = true;
+    this.apiToken = token.token;
+    this.loadUserInfo();
+    localStorage.setItem(this.appKey, this.apiToken);
+    return this.authenticated;
   }
+
+  private loadUserInfo(): void {
+    this.http
+      .post<User>(ApiUrlHelper.userInfoUrl(), { token: this.apiToken })
+      .subscribe(
+        (user: User) => { this.authListener.next(user); }
+      );
+  }
+
+  public getApiToken(): string {
+    return this.apiToken;
+  }
+
 }

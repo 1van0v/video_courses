@@ -26,6 +26,7 @@
             [courseItem]="course">
         </app-courses-list-item>
         <button class="btn underlined-btn full-width-btn"
+            *ngIf="!searchString"
             (click)="onLoadMore()">
             Load more
         </button>
@@ -46,7 +47,7 @@
                 </button>
             </div>
             <div class="modal__body">
-                <p>Are your sure you want to delete {{selectedCourse.title}}</p>
+                <p>Are your sure you want to delete {{selectedCourse.name}}</p>
             </div>
             <div class="modal__footer">
                 <button 

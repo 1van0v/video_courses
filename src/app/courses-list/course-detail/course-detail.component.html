@@ -8,7 +8,7 @@
                 <label for="course-title" class="form__label_bold">Title:</label>
                 <span
                     class="form__label_required"
-                    *ngIf="!course.title">
+                    *ngIf="!course.name">
                     *required
                 </span>
             </div>
@@ -16,7 +16,7 @@
                 id="course-title"
                 class="form__input"
                 placeholder="Course title"
-                [(ngModel)]="course.title">
+                [(ngModel)]="course.name">
             <div class="form__label">
                 <label for="course-description" class="form__label_bold">Description:</label>
                 <span
@@ -33,10 +33,10 @@
             </textarea>
             <div class="course-details__duration">
                 <div class="form__label">
-                    <label for="course-duration" class="form__label_bold">Duration:</label>
+                    <label for="course-duration" class="form__label_bold">length:</label>
                     <span
                         class="form__label_required"
-                        *ngIf="!course.duration">
+                        *ngIf="!course.length">
                         *required
                     </span>
                 </div>
@@ -46,15 +46,15 @@
                     min="0"
                     class="form__input"
                     placeholder="minutes"
-                    [(ngModel)]="course.duration">
+                    [(ngModel)]="course.length">
             </div>
-            <span>{{ course.duration | courseDuration }}</span>
+            <span>{{ course.length | courseDuration }}</span>
             <div class="course-details__date">
                 <div class="form__label">
                     <label for="course-date" class="form__label_bold">Date:</label>
                     <span
                         class="form__label_required"
-                        *ngIf="!course.creationDate">
+                        *ngIf="!course.date">
                         *required
                     </span>
                 </div>
@@ -63,7 +63,8 @@
                     type="date" 
                     class="form__input"
                     placeholder="minutes"
-                    [ngModel]="getDateString()">
+                    [value]="getDateString()"
+                    (input)="setDateString($event.target.value)">
             </div>
             <div class="course-details__authors">
                 <div class="form__label">

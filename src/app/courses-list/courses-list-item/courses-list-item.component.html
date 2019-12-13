@@ -1,12 +1,12 @@
 <div class="course__item"
-    [ngClass]="{'course_top-rated': courseItem.topRated}"
-    [appCreationDate]="courseItem.creationDate">
+    [ngClass]="{'course_top-rated': courseItem.isTopRated}"
+    [appCreationDate]="courseItem.date">
     <div class="course__details">
         <div class="course__header">
-            <h3 class="course__title">{{courseItem.title | uppercase}}</h3>
+            <h3 class="course__title">{{courseItem.name | uppercase}}</h3>
             <div class="course__timing">
-                <span class="course__duration">{{courseItem.duration | courseDuration}}</span>
-                <span class="course__creation-date">{{courseItem.creationDate | date}}</span>
+                <span class="course__duration">{{courseItem.length | courseDuration}}</span>
+                <span class="course__creation-date">{{courseItem.date | date}}</span>
             </div>
         </div>
         <div class="course__description">{{courseItem.description}}</div>

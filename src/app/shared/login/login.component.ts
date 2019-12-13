@@ -31,14 +31,16 @@ export class LoginComponent implements OnInit {
   }
 
   public login(userName: string, password: string): void {
-    const authenticated = this.authService.logIn(userName, password);
-    if (authenticated) {
-      this.router.navigate([ 'courses' ]);
-    } else {
-      this.password = '';
-      this.userName = '';
-      this.isLoginError = true;
-    }
+    this.authService.logIn(userName, password)
+      .subscribe((authenticated: boolean) => {
+        if (authenticated) {
+          this.router.navigate([ 'courses' ]);
+        } else {
+          this.password = '';
+          this.userName = '';
+          this.isLoginError = true;
+        }
+      });
   }
 
 }
