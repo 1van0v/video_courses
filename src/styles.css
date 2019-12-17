@@ -142,3 +142,12 @@ body {
 .form__input::placeholder {
     color: var(--placeholder-color);
 }
+
+@keyframes half-circle-spinner-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { AuthService } from './auth-service.service';
 
@@ -15,16 +17,15 @@ export class LoggedInGuard implements CanActivate {
 
   public canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean {
-      let authenticated = this.authService.isAuthenticated();
-      if (authenticated) {
-        return authenticated;
-      }
-      authenticated = this.authService.lookupLocalStorage();
-      if (authenticated) {
-        return authenticated;
-      }
-      this.router.navigate(['login']);
-      return authenticated;
+    state: RouterStateSnapshot): Observable<boolean> {
+      return this.authService.isAuthenticated()
+        .pipe(map(
+          (isAuthenticated: object) => {
+            if (!isAuthenticated) {
+              this.router.navigate(['login']);
+            }
+            return !!isAuthenticated;
+          }
+        ));
   }
 }

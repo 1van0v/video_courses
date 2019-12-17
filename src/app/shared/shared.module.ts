@@ -7,9 +7,10 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, BreadcrumbsComponent, LoginComponent, NotFoundComponent],
+  declarations: [HeaderComponent, FooterComponent, BreadcrumbsComponent, LoginComponent, NotFoundComponent, LoadingSpinnerComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -19,7 +20,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     HeaderComponent,
     FooterComponent,
     BreadcrumbsComponent,
-    LoginComponent
+    LoginComponent,
+    LoadingSpinnerComponent
   ]
 })
 export class SharedModule { }

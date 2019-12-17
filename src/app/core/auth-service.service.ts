@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subject, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, concatMap } from 'rxjs/operators';
 
 import { User } from './user.class';
 import { Token } from './token.class';
@@ -12,65 +12,78 @@ import { ApiUrlHelper } from './api-url-helper';
   providedIn: 'root'
 })
 export class AuthService {
-  private authenticated = false;
+  private userInfo: User;
   private appKey = 'video_courses_key';
   private apiToken: string;
-  public authListener = new Subject();
+  public authListener = new Subject<User>();
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) { }
 
-  public isAuthenticated(): boolean {
-    return this.authenticated;
+  public isAuthenticated(): Observable<User> {
+    if (!this.userInfo && this.lookupLocalStorage()) {
+      return this.authenticate(this.apiToken);
+    } else {
+      return of(this.userInfo);
+    }
   }
 
-  public logIn(login: string, password: string): Observable<boolean> {
+  public logIn(login: string, password: string): Observable<User> {
     return this.http
       .post<Token>(ApiUrlHelper.loginUrl(), { login, password })
       .pipe(
-        map((token: Token): boolean => {
+        concatMap(({ token }: Token): Observable<User> => {
           return this.authenticate(token);
         })
       );
   }
 
-  public lookupLocalStorage(): boolean {
+  public lookupLocalStorage(): string {
     const savedToken: string = localStorage.getItem(this.appKey);
     if (savedToken) {
-      this.apiToken = savedToken;
-      this.loadUserInfo();
-      return this.authenticated = true;
+      return this.apiToken = savedToken;
     }
   }
 
   public logOut(): void {
     console.log('I am logging out');
-    this.authListener.next(null);
-    this.authenticated = false;
+    this.setUserInfo(null);
     localStorage.removeItem(this.appKey);
     this.router.navigate([ 'login' ]);
   }
 
-  private authenticate(token: Token): boolean {
-    this.authenticated = true;
-    this.apiToken = token.token;
-    this.loadUserInfo();
+  private authenticate(token: string): Observable<User> {
+    this.apiToken = token;
     localStorage.setItem(this.appKey, this.apiToken);
-    return this.authenticated;
+    return this.loadUserInfo(token);
   }
 
-  private loadUserInfo(): void {
-    this.http
-      .post<User>(ApiUrlHelper.userInfoUrl(), { token: this.apiToken })
-      .subscribe(
-        (user: User) => { this.authListener.next(user); }
+  private loadUserInfo(token?: string): Observable<User> {
+    if (this.userInfo) {
+      return of(this.userInfo);
+    }
+    return this.http
+    .post<User>(ApiUrlHelper.userInfoUrl(), { token })
+    .pipe(
+      map((user: User) => {
+          return this.setUserInfo(user);
+        })
       );
+  }
+
+  private setUserInfo(userInfo: User): User {
+    this.authListener.next(userInfo);
+    return this.userInfo = userInfo;
   }
 
   public getApiToken(): string {
     return this.apiToken;
+  }
+
+  public isTokenValid(): boolean {
+    return !!this.userInfo;
   }
 
 }

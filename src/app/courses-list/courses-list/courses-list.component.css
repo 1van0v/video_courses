@@ -20,12 +20,6 @@
     border-radius: 8px;
 }
 
-#search-btn {
-    width: 100px;
-    font-size: 18px;
-    margin-left: 10px;
-}
-
 .search-container,
 .search-bar,
 .modal {

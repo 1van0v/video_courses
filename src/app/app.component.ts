@@ -8,11 +8,13 @@ import { Component,
   AfterViewChecked,
   OnDestroy } from '@angular/core';
 
-import { Router, ActivatedRoute, ActivationEnd } from '@angular/router';
+import { Router, ActivationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { AuthService } from './core/auth-service.service';
 import { BreadcrumbsService } from './shared/breadcrumbs.service';
+import { LoadingNotifierService } from './shared/loading-notifier.service';
 
 // tslint:disable-next-line: no-conflicting-lifecycle
 @Component({
@@ -25,12 +27,15 @@ export class AppComponent implements
   OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
   public title = 'video-courses-app';
   public isAuthenticated: boolean;
+  public isLoading = false;
+  private authSubscription: Subscription;
+  private loadingSubscription: Subscription;
 
   public constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
-    private breadcrumbsService: BreadcrumbsService
+    private breadcrumbsService: BreadcrumbsService,
+    private loadingNotifierService: LoadingNotifierService
   ) {
     this.router.events
       .pipe(filter(event => event instanceof ActivationEnd))
@@ -46,8 +51,15 @@ export class AppComponent implements
 
   public ngOnInit() {
     console.log('ngOnInit - Angular initializes the directive/component');
-    this.authService.authListener.subscribe((data: boolean) => {
-      this.isAuthenticated = data;
+
+    this.loadingNotifierService.getListener().subscribe(
+      (loading: boolean): void => {
+        setTimeout(() => this.isLoading = loading, 0);
+      }
+    );
+
+    this.authSubscription = this.authService.authListener.subscribe((userInfo: object) => {
+      this.isAuthenticated = Boolean(userInfo);
     });
   }
 
@@ -81,6 +93,8 @@ export class AppComponent implements
 
   public ngOnDestroy() {
     console.log('ngOnDestroy - cleanup just before Angular destroys the directive/component');
+    this.authSubscription.unsubscribe();
+    this.loadingSubscription.unsubscribe();
   }
 
 }

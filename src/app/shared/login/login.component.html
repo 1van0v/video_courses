@@ -44,6 +44,7 @@
             <button class="btn underlined-btn">Forgot password?</button>
             <button 
                 class="btn action-btn login__loginBtn"
+                [disabled]="!canLogin"
                 [ngClass]="{ 'disabled-btn': !canLogin }"
                 (click)="login(userName, password)">
                 Login

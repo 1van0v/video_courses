@@ -1,19 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CoursesListItem } from '../courses-list-item.class';
 import { CoursesService } from '../courses.service';
 import { OrderByPipe } from '../pipes/order-by.pipe';
+import { Subject, Subscription } from 'rxjs';
+import { filter, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-courses-list',
   templateUrl: './courses-list.component.html',
   styleUrls: ['./courses-list.component.css']
 })
-export class CoursesListComponent implements OnInit {
+export class CoursesListComponent implements OnInit, OnDestroy {
   public courses: CoursesListItem[] = [];
   public searchString: string;
   public showModal = false;
   public selectedCourse: CoursesListItem;
   private pageSize = 5;
+  private searchListener = new Subject();
+  private searchSubscription: Subscription;
 
   public constructor(
     private coursesService: CoursesService,
@@ -22,6 +26,11 @@ export class CoursesListComponent implements OnInit {
 
   public ngOnInit() {
     this.loadCourses(this.pageSize);
+    this.searchSubscription = this.initSearchLister();
+  }
+
+  public ngOnDestroy(): void {
+    this.searchSubscription.unsubscribe();
   }
 
   public onDeleteItem(course: CoursesListItem) {
@@ -48,13 +57,27 @@ export class CoursesListComponent implements OnInit {
     return this.orderCourses.transform(newCourses, 'asc');
   }
 
-  public onSearch() {
-    if (this.searchString) {
-      this.coursesService.findCourses(this.searchString)
-        .subscribe((courses: CoursesListItem[]) => {
-          this.courses = this.sortCourses(courses);
-        });
+  public onInput(searchStr: string): void {
+    if (!searchStr.length) {
+      this.loadCourses(this.pageSize);
+    } else {
+      this.searchListener.next(searchStr);
     }
+  }
+
+  private initSearchLister(): Subscription {
+    return this.searchListener.pipe(
+      filter((searchStr: string): boolean => searchStr.length >= 3),
+      distinctUntilChanged(),
+      debounceTime(250)
+    ).subscribe(this.lookUpCourses);
+  }
+
+  private lookUpCourses = (searchStr: string): void => {
+    this.coursesService.findCourses(searchStr)
+      .subscribe((courses: CoursesListItem[]) => {
+        this.courses = this.sortCourses(courses);
+      });
   }
 
   public cancelDelete() {
