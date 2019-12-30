@@ -4,10 +4,10 @@
             <img src="assets/logo.svg">
         </a>
     </div>
-    <div *ngIf="user">
+    <div *ngIf="(user$ | async)">
         <span>
             <img src="assets/ic-user.svg">
-            {{user.login}}
+            {{(user$ | async)?.login}}
         </span>
         <button class="btn"
             (click)="logOut()">

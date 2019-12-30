@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, from, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { CoursesListItem } from './courses-list-item.class';
@@ -13,7 +13,7 @@ export class CoursesService {
 
   public constructor(private http: HttpClient) { }
 
-  public getCourses(start: number, count: number): Observable<CoursesListItem[]> {
+  public getCourses(start: number, count: number = 5): Observable<CoursesListItem[]> {
     return this.http
       .get(ApiUrlHelper.getCoursesUrl(start, count))
       .pipe(map(this.parseDate));

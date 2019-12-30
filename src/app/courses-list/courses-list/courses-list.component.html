@@ -14,9 +14,9 @@
         <img src="assets/add.svg">
         Add course
     </button>
-    <div *ngIf="courses.length; else noCoursesBtn">
+    <div *ngIf="(courses$ | async).length; else noCoursesBtn">
         <app-courses-list-item 
-            *ngFor="let course of courses" 
+            *ngFor="let course of courses$ | async" 
             (deletedItem)="onDeleteItem($event)"
             [courseItem]="course">
         </app-courses-list-item>

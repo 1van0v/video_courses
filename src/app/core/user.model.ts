@@ -1,6 +1,6 @@
 export interface IUser {
     id: number;
-    token: string;
+    fakeToken: string;
     name: {
         firstName: string;
         lastName: string;

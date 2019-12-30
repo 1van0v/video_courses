@@ -120,6 +120,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "video-courses-app"
+    }
+  },
+  "defaultProject": "video-courses-app",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

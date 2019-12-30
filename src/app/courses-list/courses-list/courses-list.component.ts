@@ -1,31 +1,34 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subject, Subscription, Observable } from 'rxjs';
+import { filter, distinctUntilChanged, debounceTime, tap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+
 import { CoursesListItem } from '../courses-list-item.class';
-import { CoursesService } from '../courses.service';
-import { OrderByPipe } from '../pipes/order-by.pipe';
-import { Subject, Subscription } from 'rxjs';
-import { filter, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { State, getCourses } from '../../reducers/index';
+import { loadCoursesList, deleteCourse, searchCourses, cancelSearching } from '../../actions/courses-list.actions';
 
 @Component({
   selector: 'app-courses-list',
   templateUrl: './courses-list.component.html',
   styleUrls: ['./courses-list.component.css']
 })
-export class CoursesListComponent implements OnInit, OnDestroy {
-  public courses: CoursesListItem[] = [];
+export class CoursesListComponent implements OnDestroy {
+  public courses$: Observable<CoursesListItem[]>;
   public searchString: string;
   public showModal = false;
   public selectedCourse: CoursesListItem;
-  private pageSize = 5;
   private searchListener = new Subject();
   private searchSubscription: Subscription;
 
-  public constructor(
-    private coursesService: CoursesService,
-    private orderCourses: OrderByPipe
-  ) { }
+  public constructor( private store: Store<State> ) {
+    this.courses$ = this.store.select(getCourses).pipe(
+      tap((courses: CoursesListItem[]) => {
+        if (courses.length < 1 && !this.searchString) {
+          this.loadCourses();
+        }
+      })
+    );
 
-  public ngOnInit() {
-    this.loadCourses(this.pageSize);
     this.searchSubscription = this.initSearchLister();
   }
 
@@ -38,46 +41,31 @@ export class CoursesListComponent implements OnInit, OnDestroy {
     this.showModal = true;
   }
 
-  public onLoadMore() {
-    const offset = this.courses.length + 1;
-    this.coursesService.getCourses(offset, this.pageSize)
-      .subscribe((courses: CoursesListItem[]) => {
-        this.courses.push(...this.sortCourses(courses));
-      });
+  public onLoadMore(): void {
+    this.loadCourses();
   }
 
-  private loadCourses(count: number): void {
-    this.coursesService.getCourses(0, count)
-    .subscribe((courses: CoursesListItem[]) => {
-      this.courses = this.sortCourses(courses);
-    });
+  private loadCourses(): void {
+    this.store.dispatch(loadCoursesList());
   }
 
-  private sortCourses(newCourses: CoursesListItem[]): CoursesListItem[] {
-    return this.orderCourses.transform(newCourses, 'asc');
-  }
-
-  public onInput(searchStr: string): void {
-    if (!searchStr.length) {
-      this.loadCourses(this.pageSize);
+  public onInput(searchString: string): void {
+    if (!searchString.length) {
+      this.store.dispatch(cancelSearching());
     } else {
-      this.searchListener.next(searchStr);
+      this.searchListener.next(searchString);
     }
   }
 
   private initSearchLister(): Subscription {
     return this.searchListener.pipe(
-      filter((searchStr: string): boolean => searchStr.length >= 3),
+      filter((searchString: string): boolean => searchString.length >= 3),
       distinctUntilChanged(),
       debounceTime(250)
-    ).subscribe(this.lookUpCourses);
-  }
-
-  private lookUpCourses = (searchStr: string): void => {
-    this.coursesService.findCourses(searchStr)
-      .subscribe((courses: CoursesListItem[]) => {
-        this.courses = this.sortCourses(courses);
-      });
+    ).subscribe((searchString) => {
+      this.searchString = searchString;
+      this.store.dispatch(searchCourses({ searchString }));
+    });
   }
 
   public cancelDelete() {
@@ -86,11 +74,8 @@ export class CoursesListComponent implements OnInit, OnDestroy {
   }
 
   public deleteCourse(course: CoursesListItem) {
-    this.coursesService.deleteCourse(course.id)
-      .subscribe(() => {
-        this.showModal = false;
-        this.loadCourses(this.courses.length);
-      });
+    this.store.dispatch(deleteCourse({id: course.id}));
+    this.showModal = false;
   }
 
 }

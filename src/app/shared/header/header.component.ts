@@ -1,25 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../core/auth-service.service';
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 import { User } from '../../core/user.class';
+import { State, getUser } from '../../reducers/index';
+import { logOut } from '../../actions/login.actions';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
-  public user: User;
+export class HeaderComponent {
+  public user$: Observable<User>;
 
-  public constructor( private authService: AuthService ) { }
-
-  public ngOnInit(): void {
-    this.authService.authListener.subscribe(
-      (user: User) => { this.user = user; }
-    );
+  public constructor( private store: Store<State> ) {
+    this.user$ = this.store.select(getUser);
   }
 
   public logOut(): void {
-    this.authService.logOut();
+    this.store.dispatch(logOut());
   }
 
 }

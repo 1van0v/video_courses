@@ -1,38 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Store } from '@ngrx/store';
 import { Observable, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, flatMap, first } from 'rxjs/operators';
 
-import { AuthService } from './auth-service.service';
-import { LoadingNotifierService } from '../shared/loading-notifier.service';
+import { State, getUser } from '../reducers/index';
+import { logOut } from '../actions/login.actions';
+import { User } from './user.class';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  public constructor(
-    private authService: AuthService,
-    private loadingNotifierService: LoadingNotifierService
-  ) { }
+  public constructor(private store: Store<State>) {}
 
-  intercept(
+  public intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    this.loadingNotifierService.loading(true);
-
-    if (this.authService.isTokenValid()) {
-      request = request.clone({
-        headers: request.headers.set('Authorization', this.authService.getApiToken())
-      });
-    }
-
-    return next.handle(request).pipe(
-      catchError(response => {
-        if (response.statusText === 'Unauthorized') {
-          this.authService.logOut();
+    return this.store.select(getUser).pipe(
+      first(),
+      flatMap((user: User) => {
+        if (user) {
+          request = request.clone({
+            headers: request.headers.set('Authorization', user.fakeToken)
+          });
         }
-        return throwError(response);
-      }),
-      finalize(() => this.loadingNotifierService.loading(false))
+        return next.handle(request).pipe(
+          catchError(response => {
+            if (response.statusText === 'Unauthorized') {
+              this.store.dispatch(logOut);
+            }
+            return throwError(response);
+          })
+        );
+      })
     );
   }
 }

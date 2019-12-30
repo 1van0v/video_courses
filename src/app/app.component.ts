@@ -11,10 +11,13 @@ import { Component,
 import { Router, ActivationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
 import { AuthService } from './core/auth-service.service';
 import { BreadcrumbsService } from './shared/breadcrumbs.service';
 import { LoadingNotifierService } from './shared/loading-notifier.service';
+import { State, getUser } from './reducers/index';
+import { checkLocalToken } from './actions/login.actions';
 
 // tslint:disable-next-line: no-conflicting-lifecycle
 @Component({
@@ -35,7 +38,8 @@ export class AppComponent implements
     private authService: AuthService,
     private router: Router,
     private breadcrumbsService: BreadcrumbsService,
-    private loadingNotifierService: LoadingNotifierService
+    private loadingNotifierService: LoadingNotifierService,
+    private store: Store<State>
   ) {
     this.router.events
       .pipe(filter(event => event instanceof ActivationEnd))
@@ -58,9 +62,14 @@ export class AppComponent implements
       }
     );
 
-    this.authSubscription = this.authService.authListener.subscribe((userInfo: object) => {
+    this.store.select(getUser).subscribe((userInfo: object) => {
       this.isAuthenticated = Boolean(userInfo);
     });
+
+    const token = this.authService.lookupLocalStorage();
+    if (token) {
+      this.store.dispatch(checkLocalToken({token}));
+    }
   }
 
   public ngDoCheck() {

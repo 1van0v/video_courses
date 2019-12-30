@@ -16,10 +16,10 @@ export class ApiUrlHelper {
   }
 
   public static getCoursesUrl(start: number, count: number): string {
-    return this.coursesUrl() + '?start=' + start + '&count=' + count;
+    return this.coursesUrl() + '?start=' + start + '&count=' + count + '&sort=date';
   }
 
   public static searchCoursesUrl(searchStr: string): string {
-    return this.coursesUrl() + '?textFragment=' + searchStr;
+    return this.coursesUrl() + '?sort=date&textFragment=' + searchStr;
   }
 }
