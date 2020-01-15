@@ -1,0 +1,72 @@
+:host {
+    display: block;
+}
+
+.authors__list {
+    display: flex;
+    align-items: center;
+    align-content: space-around;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    flex-wrap: wrap;
+    height: auto;
+}
+
+.author-name__parts {
+    background-color: inherit;
+}
+
+.author__name {
+    background-color: var(--pale-gray);
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.author-name__parts,
+.author-name__input {
+    white-space: nowrap;
+}
+
+.author-name__input {
+    flex-grow: 2;
+}
+
+input[type="text"] {
+    font-size: 1rem;
+    border: none;
+}
+
+input[type="text"]:focus {
+    outline: none;
+}
+
+.authors__container {
+    height: auto;
+    position: relative;
+}
+
+.author-suggestions {
+    max-height: 5rem;
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+    background-color: inherit;
+}
+
+.author-suggestions__author {
+    cursor: pointer;
+    padding: 1px 0;
+}
+
+.author-suggestions__author:hover {
+    box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
+}
+
+.author-name__close {
+    cursor: pointer;
+    width: 1rem;
+}
+
+.ng-invalid.ng-touched:host .authors__container {
+    border-color: red;
+}

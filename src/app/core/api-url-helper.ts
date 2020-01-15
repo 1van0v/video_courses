@@ -22,4 +22,10 @@ export class ApiUrlHelper {
   public static searchCoursesUrl(searchStr: string): string {
     return this.coursesUrl() + '?sort=date&textFragment=' + searchStr;
   }
+
+  public static searchAuthorsUrl(searchStr: string): string {
+    let authorsUrl = this.baseUrl + 'authors';
+    authorsUrl += searchStr ? '?textFragment=' + searchStr : '';
+    return authorsUrl;
+  }
 }

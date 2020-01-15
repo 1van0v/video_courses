@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { CoursesListItem } from '../courses-list-item.class';
@@ -12,7 +13,14 @@ import { BreadcrumbsService } from '../../shared/breadcrumbs.service';
   styleUrls: ['./course-detail.component.css']
 })
 export class CourseDetailComponent implements OnInit {
-  public course = new CoursesListItem();
+  public course = new FormGroup({
+    id: new FormControl(''),
+    name: new FormControl('', [ Validators.required, Validators.maxLength(50)]),
+    description: new FormControl('', [ Validators.required, Validators.maxLength(500)]),
+    date: new FormControl(''),
+    length: new FormControl(''),
+    authors: new FormControl([])
+  });
   public windowTitle = 'New';
 
   public constructor(
@@ -25,20 +33,11 @@ export class CourseDetailComponent implements OnInit {
   public ngOnInit() {
     this.activatedRoute.params
       .subscribe(params => {
-        if (params.id !== 'new') {
+        if (params.id) {
           this.fetchCourse(Number(params.id));
           this.windowTitle = 'Edit';
         }
       });
-  }
-
-  public getDateString(): string {
-    const dateString = this.course.date as string;
-    return dateString && dateString.split('T')[0];
-  }
-
-  public setDateString(dateStr: string): void {
-    this.course.date = (new Date(dateStr)).toISOString();
   }
 
   public cancelEditing(): void {
@@ -46,16 +45,18 @@ export class CourseDetailComponent implements OnInit {
   }
 
   public saveCourse(): void {
-    this.getSaveAction(this.course).subscribe(() => {
+    const formData = this.course.value;
+    const { authors } = formData;
+    this.getSaveAction({ ...formData, ...authors }).subscribe(() => {
       this.goToCourses();
     });
   }
 
   private getSaveAction(course: CoursesListItem): Observable<CoursesListItem> {
     if (course.id) {
-      return this.coursesService.updateCourse(this.course);
+      return this.coursesService.updateCourse(course);
     } else {
-      return this.coursesService.createCourse(this.course);
+      return this.coursesService.createCourse(course);
     }
   }
 
@@ -69,10 +70,18 @@ export class CourseDetailComponent implements OnInit {
         if (!course) {
           this.router.navigate([ 'PageNotFound' ]);
         }
-        this.course = { ...course };
+        this.course.patchValue({ ...course });
         const { breadcrumb } = this.activatedRoute.routeConfig.data;
-        this.breadcrumbsService.updateTitle(breadcrumb.title, this.course.name);
+        this.breadcrumbsService.updateTitle(breadcrumb.title, course.name);
       });
+  }
+
+  public get name() {
+    return this.course.get('name');
+  }
+
+  public get description() {
+    return this.course.get('description');
   }
 
 }

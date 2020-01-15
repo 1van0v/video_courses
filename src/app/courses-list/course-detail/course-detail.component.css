@@ -25,22 +25,11 @@
     width: 180px;
 }
 
-.course-details__duration {
-    display: inline-block;
-    margin-right: 12px;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    color: rgba(0, 0, 0, 0);
-    display: block;
-    opacity: 1;
-    background: url(/assets/calendar.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 18px;
-    height: 18px;
-}
-
 .course-details__authors {
     width: 400px;
+}
+
+button[disabled].action-btn {
+    background-color: lightgray;
+    cursor: not-allowed;
 }

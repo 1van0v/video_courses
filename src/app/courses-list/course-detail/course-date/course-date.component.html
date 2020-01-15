@@ -1,0 +1,11 @@
+<div class="form__label">
+    <label for="course-date" class="form__label_bold">Date:</label>
+    <span class="form__label_error">
+        <span *ngIf="date.errors?.required && date.touched">*required</span>
+    </span>
+</div>
+<input
+    id="course-date"
+    type="date"
+    class="form__input"
+    [formControl]="date">

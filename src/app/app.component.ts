@@ -13,11 +13,9 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
-import { AuthService } from './core/auth-service.service';
 import { BreadcrumbsService } from './shared/breadcrumbs.service';
 import { LoadingNotifierService } from './shared/loading-notifier.service';
-import { State, getUser } from './reducers/index';
-import { checkLocalToken } from './actions/login.actions';
+import { State, getUser } from './store/index';
 
 // tslint:disable-next-line: no-conflicting-lifecycle
 @Component({
@@ -35,7 +33,6 @@ export class AppComponent implements
   private loadingSubscription: Subscription;
 
   public constructor(
-    private authService: AuthService,
     private router: Router,
     private breadcrumbsService: BreadcrumbsService,
     private loadingNotifierService: LoadingNotifierService,
@@ -65,11 +62,6 @@ export class AppComponent implements
     this.store.select(getUser).subscribe((userInfo: object) => {
       this.isAuthenticated = Boolean(userInfo);
     });
-
-    const token = this.authService.lookupLocalStorage();
-    if (token) {
-      this.store.dispatch(checkLocalToken({token}));
-    }
   }
 
   public ngDoCheck() {

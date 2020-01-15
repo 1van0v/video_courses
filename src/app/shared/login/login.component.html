@@ -1,10 +1,12 @@
 <div class="login__background">
-    <div class="login__window">
+    <form
+        class="login__window"
+        [formGroup]="user">
         <div class="login__header">
             <div class="login__title">Login</div>
             <div
                 class="login__warning"
-                *ngIf="isLoginError">
+                *ngIf="(isLoginError$ | async) && !user.dirty">
                 Wrong e-mail or password
             </div>
         </div>
@@ -12,43 +14,43 @@
             <div class="form__label">
                 <label for="login" class="form__label_bold">E-mail:</label>
                 <span
-                    class="form__label_required"
-                    *ngIf="!userName">
+                    class="form__label_error"
+                    *ngIf="!user.value.login">
                     *required
                 </span>
             </div>
-            <input 
-                id="login" 
-                type="email" 
+            <input
+                autofocus
+                id="login"
+                type="email"
                 class="form__input"
                 placeholder="Enter e-mail"
-                [(ngModel)]="userName"
-                (ngModelChange)="isFormFilled()">
+                formControlName="login">
             <div class="form__label">
                 <label for="password" class="form__label_bold">Password:</label>
                 <span
-                    class="form__label_required"
-                    *ngIf="!password">
+                    class="form__label_error"
+                    *ngIf="!user.value.password">
                     *required
                 </span>
             </div>
             <input 
-                id="password" 
-                type="password" 
+                id="password"
+                type="password"
                 class="form__input"
                 placeholder="Enter password"
-                [(ngModel)]="password"
-                (ngModelChange)="isFormFilled()">
+                formControlName="password">
         </div>
         <div class="login__footer">
-            <button class="btn underlined-btn">Forgot password?</button>
+            <button class="btn underlined-btn" type="button">Forgot password?</button>
             <button 
                 class="btn action-btn login__loginBtn"
-                [disabled]="!canLogin"
-                [ngClass]="{ 'disabled-btn': !canLogin }"
-                (click)="login(userName, password)">
+                type="submit"
+                [disabled]="!user.valid"
+                [ngClass]="{ 'disabled-btn': !user.valid }"
+                (click)="login()">
                 Login
             </button>
         </div>
-    </div>
+    </form>
 </div>

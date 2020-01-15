@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store, Action } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { mergeMap, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import * as CoursesListActions from '../actions/courses-list.actions';
-import { CoursesService } from '../courses-list/courses.service';
-import { State, getCourses } from '../reducers/index';
-import { CoursesListItem } from '../courses-list/courses-list-item.class';
+import { CoursesService } from '../../courses-list/courses.service';
+import { State, getCourses } from '../index';
+import { CoursesListItem } from '../../courses-list/courses-list-item.class';
 
 @Injectable()
 export class CoursesListEffects {
@@ -20,7 +20,7 @@ export class CoursesListEffects {
   public loadCourses$ = createEffect(() => this.actions$.pipe(
     ofType(CoursesListActions.loadCoursesList),
     withLatestFrom(this.store.select(getCourses)),
-    mergeMap(([action, storedCourses]) => {
+    mergeMap(([, storedCourses]) => {
       return this.coursesService.getCourses(storedCourses.length)
         .pipe(
           map(courses => CoursesListActions.updateCoursesList({ courses })));

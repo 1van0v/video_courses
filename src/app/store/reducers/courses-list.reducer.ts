@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import { CoursesListItem } from '../courses-list/courses-list-item.class';
+import { CoursesListItem } from '../../courses-list/courses-list-item.class';
 import * as CoursesListActions from '../actions/courses-list.actions';
 
 export interface CoursesListState {

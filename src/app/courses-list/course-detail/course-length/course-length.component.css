@@ -1,0 +1,10 @@
+:host {
+    display: block;
+    white-space: nowrap;
+}
+
+.length-form__input {
+    margin-right: 12px;
+    display: inline-block;
+    width: inherit;
+}

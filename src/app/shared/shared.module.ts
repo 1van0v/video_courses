@@ -5,7 +5,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { LoginComponent } from './login/login.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
@@ -14,6 +14,7 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule
   ],
   exports: [

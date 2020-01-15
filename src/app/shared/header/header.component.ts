@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { User } from '../../core/user.class';
-import { State, getUser } from '../../reducers/index';
-import { logOut } from '../../actions/login.actions';
+import { State, getUser } from '../../store/index';
+import { logOut } from '../../store/actions/login.actions';
 
 @Component({
   selector: 'app-header',

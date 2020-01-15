@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 
-import { User } from '../core/user.class';
-import { Token } from '../core/token.class';
+import { User } from '../../core/user.class';
+import { Token } from '../../core/token.class';
 
 export const login = createAction(
   '[Login] Login',
@@ -16,6 +16,8 @@ export const loginSucceed = createAction(
 export const logOut = createAction('[Login] Log Out');
 
 export const loginFailed = createAction('[Login] Login failed');
+
+export const lookUpLocalToken = createAction('[Login] Check for local token');
 
 export const checkLocalToken = createAction(
   '[Login] send local token',

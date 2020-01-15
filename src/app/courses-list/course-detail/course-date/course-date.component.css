@@ -1,0 +1,14 @@
+:host {
+    display: block;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0);
+    display: block;
+    opacity: 1;
+    background: url(/assets/calendar.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 18px;
+    height: 18px;
+}

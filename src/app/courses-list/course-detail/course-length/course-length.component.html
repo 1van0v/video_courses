@@ -1,0 +1,15 @@
+<div class="form__label">
+    <label for="course-duration" class="form__label_bold">length:</label>
+    <span class="form__label_error" *ngIf="length.errors?.required && length.touched">
+        *required
+    </span>
+</div>
+<input
+    id="course-length"
+    class="length-form__input"
+    type="number"
+    min="0"
+    class="form__input"
+    placeholder="minutes"
+    [formControl]="length">
+<span> {{ length.value | courseDuration }}</span>

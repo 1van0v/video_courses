@@ -1,0 +1,40 @@
+<div class="form__label">
+    <label for="course-authors" class="form__label_bold">Authors:</label>
+    <span class="form__label_error" *ngIf="!authors.value.length && authorSearchControl.touched">
+        *required
+    </span>
+</div>
+<div class="form__input authors__container">
+    <div class="authors__list" [formGroup]="authorsForm">
+        <div formArrayName="authors" *ngFor="let author of authors.controls; let i = index">
+            <div class="author__name" [formGroupName]="i">
+                <input style="display: none" formControlName="id">
+                <input class="author-name__parts"
+                    type="text"
+                    disabled
+                    [ngStyle]="{'width.ch': author.value.name.length + 1}"
+                    formControlName="name">
+                <input class="author-name__parts"
+                    disabled
+                    type="text"
+                    [ngStyle]="{'width.ch': author.value.lastName.length + 1}"
+                    formControlName="lastName">
+                <img class="author-name__close"
+                    src="assets/close.svg"
+                    (click)="removeAuthor(i)">
+            </div>
+        </div>
+        <input class="author-name__input"
+            type="text"
+            placeholder="Type to add an author"
+            [formControl]="authorSearchControl"
+            (blur)="onTouched()">
+    </div>
+    <div class="author-suggestions">
+        <div class="author-suggestions__author"
+            *ngFor="let author of (suggestedAuthors$ | async)"
+            (click)="addAuthor($event)"
+            data-id="{{author.id}}"
+        >{{author.name}}</div>
+    </div>
+</div>

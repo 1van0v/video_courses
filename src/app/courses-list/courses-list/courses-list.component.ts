@@ -4,8 +4,8 @@ import { filter, distinctUntilChanged, debounceTime, tap } from 'rxjs/operators'
 import { Store } from '@ngrx/store';
 
 import { CoursesListItem } from '../courses-list-item.class';
-import { State, getCourses } from '../../reducers/index';
-import { loadCoursesList, deleteCourse, searchCourses, cancelSearching } from '../../actions/courses-list.actions';
+import { State, getCourses } from '../../store/index';
+import { loadCoursesList, deleteCourse, searchCourses, cancelSearching } from '../../store/actions/courses-list.actions';
 
 @Component({
   selector: 'app-courses-list',

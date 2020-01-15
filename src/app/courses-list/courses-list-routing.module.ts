@@ -13,16 +13,16 @@ const routes: Routes = [
     canActivate: [ LoggedInGuard ]
   },
   {
+    path: 'course/new',
+    component: CourseDetailComponent,
+    canActivate: [ LoggedInGuard ],
+    data: { breadcrumb: { title: 'New' } }
+  },
+  {
     path: 'course/:id',
     component: CourseDetailComponent,
     canActivate: [ LoggedInGuard ],
     data: { breadcrumb: { title: 'course' } }
-  },
-  {
-    path: 'course/new',
-    component: CourseDetailComponent,
-    canActivate: [ LoggedInGuard ],
-    data: { breadcrumb: {title: 'New' } }
   }
 ];
 

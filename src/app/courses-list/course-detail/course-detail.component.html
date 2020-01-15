@@ -3,85 +3,40 @@
         <div class="modal__header">
             <span class="modal__title">{{windowTitle}} course</span>
         </div>
-        <div class="modal__body">
+        <form class="modal__body" [formGroup]="course">
             <div class="form__label">
                 <label for="course-title" class="form__label_bold">Title:</label>
-                <span
-                    class="form__label_required"
-                    *ngIf="!course.name">
+                <span class="form__label_error" *ngIf="name.errors?.required && name.touched">
                     *required
+                </span>
+                <span class="form__label_error" *ngIf="name.errors?.maxlength">
+                    *Title should not be longer than 50
                 </span>
             </div>
             <input
                 id="course-title"
                 class="form__input"
                 placeholder="Course title"
-                [(ngModel)]="course.name">
+                formControlName="name">
             <div class="form__label">
                 <label for="course-description" class="form__label_bold">Description:</label>
-                <span
-                    class="form__label_required"
-                    *ngIf="!course.description">
+                <span class="form__label_error" *ngIf="description.errors?.required && description.touched">
                     *required
+                </span>
+                <span class="form__label_error" *ngIf="description.errors?.maxlength">
+                    *Description should not be longer than 500
                 </span>
             </div>
             <textarea 
                 id="course-description" 
                 class="course-details__description form__input"
                 placeholder="Course description"
-                [(ngModel)]="course.description">
+                formControlName="description">
             </textarea>
-            <div class="course-details__duration">
-                <div class="form__label">
-                    <label for="course-duration" class="form__label_bold">length:</label>
-                    <span
-                        class="form__label_required"
-                        *ngIf="!course.length">
-                        *required
-                    </span>
-                </div>
-                <input 
-                    id="course-duration" 
-                    type="number"
-                    min="0"
-                    class="form__input"
-                    placeholder="minutes"
-                    [(ngModel)]="course.length">
-            </div>
-            <span>{{ course.length | courseDuration }}</span>
-            <div class="course-details__date">
-                <div class="form__label">
-                    <label for="course-date" class="form__label_bold">Date:</label>
-                    <span
-                        class="form__label_required"
-                        *ngIf="!course.date">
-                        *required
-                    </span>
-                </div>
-                <input
-                    id="course-date" 
-                    type="date" 
-                    class="form__input"
-                    placeholder="minutes"
-                    [value]="getDateString()"
-                    (input)="setDateString($event.target.value)">
-            </div>
-            <div class="course-details__authors">
-                <div class="form__label">
-                    <label for="course-authors" class="form__label_bold">Authors:</label>
-                    <span
-                        class="form__label_required"
-                        *ngIf="!course.authors">
-                        *required
-                    </span>
-                </div>
-                <input 
-                    id="course-authors" 
-                    class="form__input"
-                    placeholder="Start typing"
-                    [(ngModel)]="course.authors">
-            </div>
-        </div>
+            <app-course-length class="course-details__duration" formControlName="length"></app-course-length>
+            <app-course-date class="course-details__date" formControlName="date"></app-course-date>
+            <app-course-authors class="course-details__authors" formControlName="authors"></app-course-authors>
+        </form>
         <div class="modal__footer">
             <button 
                 class="btn dismiss-btn"
@@ -90,6 +45,7 @@
             </button>
             <button 
                 class="btn action-btn"
+                [disabled]="course.invalid"
                 (click)="saveCourse()">
                 Save
             </button>

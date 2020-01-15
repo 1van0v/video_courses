@@ -5,6 +5,7 @@
     --sick-green: #9bc837;
     --content-padding: 85px;
     --background-gray: #eaedf5;
+    --pale-gray: #f2f3f7;
     --gray-font: #6c7283;
     --placeholder-color: #d9dbe3;
 }
@@ -124,7 +125,7 @@ body {
     font-size: smaller;
 }
 
-.form__label_required {
+.form__label_error {
     font-size: x-small;
     color: var(--gray-font);
 }
@@ -150,4 +151,12 @@ body {
     100%{
         transform: rotate(360deg);
     }
+}
+
+.ng-invalid.ng-touched {
+    border-color: red;
+}
+
+.ng-invalid.ng-touched:focus {
+    outline-color: red;
 }

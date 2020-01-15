@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, throwError } from 'rxjs';
 import { catchError, flatMap, first } from 'rxjs/operators';
 
-import { State, getUser } from '../reducers/index';
-import { logOut } from '../actions/login.actions';
+import { State, getUser } from '../store/index';
+import { loginFailed } from '../store/actions/login.actions';
 import { User } from './user.class';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(
           catchError(response => {
             if (response.statusText === 'Unauthorized') {
-              this.store.dispatch(logOut);
+              this.store.dispatch(loginFailed());
             }
             return throwError(response);
           })

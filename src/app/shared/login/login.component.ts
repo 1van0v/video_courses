@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
-import { State } from '../../reducers/index';
-import { login } from '../../actions/login.actions';
+import { State, getLoginStatus } from '../../store/index';
+import { login } from '../../store/actions/login.actions';
 
 @Component({
   selector: 'app-login',
@@ -10,21 +12,19 @@ import { login } from '../../actions/login.actions';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  public userName: string;
-  public password: string;
-  public isLoginError = false;
-  public canLogin: boolean;
+  public isLoginError$: Observable<boolean>;
+  public user = new FormGroup({
+    login: new FormControl('', [ Validators.required ]),
+    password: new FormControl('', [ Validators.required ])
+  });
 
-  public constructor(private store: Store<State>) { }
-
-
-  public isFormFilled(): void {
-    this.isLoginError = false;
-    this.canLogin = Boolean(this.userName) && Boolean(this.password);
+  public constructor(private store: Store<State>) {
+    this.isLoginError$ = this.store.select(getLoginStatus);
   }
 
-  public login(userName: string, password: string): void {
-    this.store.dispatch(login({login: userName, password}));
+  public login(): void {
+    this.store.dispatch(login(this.user.value));
+    this.user.markAsPristine();
   }
 
 }
