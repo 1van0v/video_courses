@@ -8,3 +8,29 @@ header {
     border: none;
     margin-left: 1rem;
 }
+
+.header-controls,
+.translate-form {
+    display: flex;
+}
+
+.translate-form {
+    margin-left: 10px;
+    align-items: center;
+}
+
+.translate-form__selector {
+    background-color: inherit;
+    font-size: inherit;
+    color: inherit;
+    border: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 2em
+}
+
+.translate-form__selector > option {
+    background: rgba(0, 0, 0, 0.3);
+    color: inherit;
+}

@@ -14,11 +14,11 @@
     <div class="action-buttons">
         <button class="btn" routerLink="../course/{{courseItem.id}}">
             <img class="icon" src="assets/edit.svg">
-            Edit
+            {{ 'courses.edit' | translate }}
         </button>
         <button class="btn" (click)="deleteItem(courseItem)">
             <img class="icon" src="assets/delete.svg">
-            Delete
+            {{ 'courses.delete' | translate }}
         </button>
     </div>
 </div>

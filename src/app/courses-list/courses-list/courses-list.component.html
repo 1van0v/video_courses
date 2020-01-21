@@ -3,7 +3,7 @@
         <div class="search-bar">
             <img src="assets/ic-search.svg" class="search-image">
             <input type="text" 
-                placeholder="Text to search" 
+                [placeholder]="'courses.searchPlaceholder' | translate" 
                 class="search-field"
                 [(ngModel)]="searchString"
                 (keyup)="onInput($event.target.value)">
@@ -12,7 +12,7 @@
     <button class="btn add-btn"
         routerLink="../course/new">
         <img src="assets/add.svg">
-        Add course
+        {{ 'courses.addCourse' | translate }}
     </button>
     <div *ngIf="(courses$ | async).length; else noCoursesBtn">
         <app-courses-list-item 
@@ -22,8 +22,8 @@
         </app-courses-list-item>
         <button class="btn underlined-btn full-width-btn"
             *ngIf="!searchString"
-            (click)="onLoadMore()">
-            Load more
+            (click)="onLoadMore()"
+            [translate]="'courses.loadMore'">
         </button>
     </div>
     <ng-template #noCoursesBtn>

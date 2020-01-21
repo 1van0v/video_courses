@@ -4,7 +4,7 @@
             <img src="assets/logo.svg">
         </a>
     </div>
-    <div *ngIf="(user$ | async)">
+    <div class="header-controls" *ngIf="(user$ | async)">
         <span>
             <img src="assets/ic-user.svg">
             {{(user$ | async)?.login}}
@@ -14,5 +14,15 @@
             <img src="assets/ic-exit.svg">
             Log off
         </button>
+        <div class="translate-form">
+            <label for="languageSelector">
+                <img src="assets/translate.svg">
+            </label>
+            <select [formControl]="language" id="languageSelector" class="translate-form__selector">
+                <option *ngFor="let lang of translate.getLangs()" [value]="lang">
+                    {{ lang | translate }}
+                </option>
+            </select>
+        </div>
     </div>
 </header>

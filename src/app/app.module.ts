@@ -9,6 +9,7 @@ import { CoreModule } from './core/core.module';
 import { CoursesListModule } from './courses-list/courses-list.module';
 import { SharedModule } from './shared/shared.module';
 import { AppStoreModule } from './store/app-store.module';
+import { TranslationModule } from './translation/translation.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AppStoreModule } from './store/app-store.module';
     AppRoutingModule,
     SharedModule,
     HttpClientModule,
-    AppStoreModule
+    AppStoreModule,
+    TranslationModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

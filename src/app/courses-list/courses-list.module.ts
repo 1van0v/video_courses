@@ -6,6 +6,7 @@ import { CoursesListComponent } from './courses-list/courses-list.component';
 import { CoursesListItemComponent } from './courses-list-item/courses-list-item.component';
 import { CourseDurationPipe } from './pipes/course-duration.pipe';
 
+import { TranslationModule } from '../translation/translation.module';
 import { CoursesListRoutingModule } from './courses-list-routing.module';
 import { CourseDetailComponent } from './course-detail/course-detail.component';
 import { CourseItemBorderDirective } from './course-item-border.directive';
@@ -32,7 +33,8 @@ import { CourseAuthorsComponent } from './course-detail/course-authors/course-au
     CommonModule,
     CoursesListRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslationModule
   ],
   exports: [
     CoursesListComponent

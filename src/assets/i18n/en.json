@@ -1,0 +1,11 @@
+{
+    "courses": {
+        "searchPlaceholder": "Text to search",
+        "addCourse": "Add course",
+        "loadMore": "Load more",
+        "delete": "Delete",
+        "edit": "Edit"
+    },
+    "en": "En",
+    "ru": "Ru"
+}
